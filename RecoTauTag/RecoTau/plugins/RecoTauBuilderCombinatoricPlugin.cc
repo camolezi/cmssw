@@ -176,7 +176,7 @@ namespace reco {
       }
 
       // Define output.
-      output_type output;
+      return_type output;
 
       // Update the primary vertex used by the quality cuts.  The PV is supplied by
       // the base class.
@@ -489,12 +489,12 @@ namespace reco {
             //edm::LogPrint("RecoTauBuilderCombinatoricPlugin") << "bendCorrMass2 = " << sqrt(bendCorrMass2) << std::endl;
             tauPtr->setBendCorrMass(sqrt(bendCorrMass2));
 
-            output.push_back(std::move(tauPtr));
+            output->emplace_back(std::move(tauPtr));
           }
         }
       }
 
-      return output.release();
+      return std::move(output);;
     }
 
   }  // namespace tau

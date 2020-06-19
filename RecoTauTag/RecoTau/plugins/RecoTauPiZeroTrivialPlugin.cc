@@ -37,16 +37,16 @@ namespace reco::tau {
 
   RecoTauPiZeroBuilderPlugin::return_type RecoTauPiZeroTrivialPlugin::operator()(const reco::Jet& jet) const {
     std::vector<CandidatePtr> pfGammaCands = qcuts_.filterCandRefs(pfGammas(jet));
-    PiZeroVector output;
-    output.reserve(pfGammaCands.size());
+    return_type output;
+    output->reserve(pfGammaCands.size());
 
     for (auto const& gamma : pfGammaCands) {
       std::unique_ptr<RecoTauPiZero> piZero(
           new RecoTauPiZero(0, (*gamma).p4(), (*gamma).vertex(), 22, 1000, true, RecoTauPiZero::kTrivial));
       piZero->addDaughter(gamma);
-      output.push_back(std::move(piZero));
+      output->emplace_back(std::move(piZero));
     }
-    return output.release();
+    return std::move(output);
   }
 
 }  // namespace reco::tau

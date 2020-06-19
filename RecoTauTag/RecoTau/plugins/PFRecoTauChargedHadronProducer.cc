@@ -65,10 +65,10 @@ public:
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 private:
-  typedef boost::ptr_vector<Builder> builderList;
-  typedef boost::ptr_vector<Ranker> rankerList;
-  typedef boost::ptr_vector<reco::PFRecoTauChargedHadron> ChargedHadronVector;
-  typedef boost::ptr_list<reco::PFRecoTauChargedHadron> ChargedHadronList;
+  typedef std::vector<std::unique_ptr<Ranker>> rankerList;
+  typedef std::vector<std::unique_ptr<Builder>> builderList;
+  typedef std::vector<std::unique_ptr<reco::PFRecoTauChargedHadron>> ChargedHadronVector;
+  typedef std::list<std::unique_ptr<reco::PFRecoTauChargedHadron>> ChargedHadronList;
 
   typedef reco::tau::RecoTauLexicographicalRanking<rankerList, reco::PFRecoTauChargedHadron> ChargedHadronPredicate;
 

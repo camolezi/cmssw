@@ -197,7 +197,7 @@ namespace reco {
         edm::LogPrint("RecoTauPiZeroStripPlugin2") << " minStripEt = " << minStripEt_;
       }
 
-      PiZeroVector output;
+      return_type output;
 
       // Get the candidates passing our quality cuts
       qcuts_->setPV(vertexAssociator_.associatedVertex(jet));
@@ -282,7 +282,7 @@ namespace reco {
           // Update the vertex
           if (strip->daughterPtr(0).isNonnull())
             strip->setVertex(strip->daughterPtr(0)->vertex());
-          output.push_back(std::move(strip));
+          output->emplace_back(std::move(strip));
 
           // Mark daughters as being part of this strip
           markCandsInStrip(seedCandFlags, seedCandIdsCurrentStrip);
@@ -300,19 +300,19 @@ namespace reco {
       }
 
       // Check if we want to combine our strips
-      if (combineStrips_ && output.size() > 1) {
+      if (combineStrips_ && output->size() > 1) {
         PiZeroVector stripCombinations;
         // Sort the output by descending pt
-        output.sort(
-            output.begin(), output.end(), boost::bind(&RecoTauPiZero::pt, _1) > boost::bind(&RecoTauPiZero::pt, _2));
+        std::sort(
+            output->begin(), output->end(),[&](auto& arg1,auto&arg2){return arg1.pt() > arg2.pt();});
         // Get the end of interesting set of strips to try and combine
-        PiZeroVector::const_iterator end_iter = takeNElements(output.begin(), output.end(), maxStrips_);
+        PiZeroVector::const_iterator end_iter = takeNElements(output->begin(), output->end(), maxStrips_);
 
         // Look at all the combinations
-        for (PiZeroVector::const_iterator first = output.begin(); first != end_iter - 1; ++first) {
+        for (PiZeroVector::const_iterator first = output->begin(); first != end_iter - 1; ++first) {
           for (PiZeroVector::const_iterator second = first + 1; second != end_iter; ++second) {
-            Candidate::LorentzVector firstP4 = first->p4();
-            Candidate::LorentzVector secondP4 = second->p4();
+            Candidate::LorentzVector firstP4 = (*first)->p4();
+            Candidate::LorentzVector secondP4 = (*second)->p4();
             // If we assume a certain mass for each strip apply it here.
             firstP4 = applyMassConstraint(firstP4, combinatoricStripMassHypo_);
             secondP4 = applyMassConstraint(secondP4, combinatoricStripMassHypo_);
@@ -329,10 +329,10 @@ namespace reco {
                                   RecoTauPiZero::kUndefined));
 
             // Now loop over the strip members
-            for (auto const& gamma : first->daughterPtrVector()) {
+            for (auto const& gamma : (*first)->daughterPtrVector()) {
               combinedStrips->addDaughter(gamma);
             }
-            for (auto const& gamma : second->daughterPtrVector()) {
+            for (auto const& gamma : (*second)->daughterPtrVector()) {
               combinedStrips->addDaughter(gamma);
             }
             // Update the vertex
@@ -344,10 +344,10 @@ namespace reco {
         }
         // When done doing all the combinations, add the combined strips to the
         // output.
-        output.transfer(output.end(), stripCombinations);
+        output.transfer(output->end(), stripCombinations);
       }
 
-      return output.release();
+      return std::move(output);
     }
   }  // namespace tau
 }  // namespace reco

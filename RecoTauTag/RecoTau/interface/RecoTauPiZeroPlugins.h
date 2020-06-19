@@ -33,7 +33,7 @@ namespace reco {
     class RecoTauPiZeroBuilderPlugin : public RecoTauEventHolderPlugin {
     public:
       // Return a vector of pointers
-      typedef boost::ptr_vector<RecoTauPiZero> PiZeroVector;
+      typedef std::vector<std::unique_ptr<RecoTauPiZero>> PiZeroVector;
       // Storing the result in an auto ptr on function return allows
       // allows us to safely release the ptr_vector in the virtual function
       typedef std::unique_ptr<PiZeroVector> return_type;

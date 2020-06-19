@@ -57,12 +57,12 @@ namespace reco {
       // Get list of gamma candidates
       typedef std::vector<reco::CandidatePtr> CandPtrs;
       typedef CandPtrs::const_iterator CandIter;
-      PiZeroVector output;
+      return_type output;
 
       CandPtrs pfGammaCands = qcuts_.filterCandRefs(pfGammas(jet));
       // Check if we have anything to do...
       if (pfGammaCands.size() < choose_)
-        return output.release();
+        return std::move(output);
 
       // Define the valid range of gammas to use
       CandIter start_iter = pfGammaCands.begin();
@@ -91,9 +91,9 @@ namespace reco {
           piZero->setVertex(piZero->daughterPtr(0)->vertex());
 
         if ((maxMass_ < 0 || piZero->mass() < maxMass_) && piZero->mass() > minMass_)
-          output.push_back(piZero.get());
+          output->emplace_back(piZero.get());
       }
-      return output.release();
+      return std::move(output);
     }
 
   }  // namespace tau

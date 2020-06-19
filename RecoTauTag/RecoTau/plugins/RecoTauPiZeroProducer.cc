@@ -51,10 +51,10 @@ public:
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 private:
-  typedef boost::ptr_vector<Builder> builderList;
-  typedef boost::ptr_vector<Ranker> rankerList;
-  typedef boost::ptr_vector<reco::RecoTauPiZero> PiZeroVector;
-  typedef boost::ptr_list<reco::RecoTauPiZero> PiZeroList;
+  typedef std::vector<std::unique_ptr<Builder>> builderList;
+  typedef std::vector<std::unique_ptr<Ranker>> rankerList;
+  typedef std::vector<std::unique_ptr<reco::RecoTauPiZero>> PiZeroVector;
+  typedef std::list<std::unique_ptr<reco::RecoTauPiZero>> PiZeroList;
 
   typedef reco::tau::RecoTauLexicographicalRanking<rankerList, reco::RecoTauPiZero> PiZeroPredicate;
 

@@ -164,7 +164,7 @@ namespace reco {
         edm::LogPrint("TauChHadronFromPF") << " pluginName = " << name();
       }
 
-      ChargedHadronVector output;
+      return_type output;
 
       // Get the candidates passing our quality cuts
       qcuts_->setPV(vertexAssociator_.associatedVertex(jet));
@@ -278,10 +278,10 @@ namespace reco {
         // Update the vertex
         if (chargedHadron->daughterPtr(0).isNonnull())
           chargedHadron->setVertex(chargedHadron->daughterPtr(0)->vertex());
-        output.push_back(std::move(chargedHadron));
+        output->push_back(std::move(chargedHadron));
       }
 
-      return output.release();
+      return std::move(output);
     }
 
   }  // namespace tau

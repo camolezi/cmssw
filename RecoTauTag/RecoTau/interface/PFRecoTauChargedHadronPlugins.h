@@ -35,7 +35,7 @@ namespace reco {
     class PFRecoTauChargedHadronBuilderPlugin : public RecoTauEventHolderPlugin {
     public:
       // Return a vector of pointers
-      typedef boost::ptr_vector<PFRecoTauChargedHadron> ChargedHadronVector;
+      typedef std::vector<std::unique_ptr<PFRecoTauChargedHadron>> ChargedHadronVector;
       // Storing the result in an auto ptr on function return allows
       // allows us to safely release the ptr_vector in the virtual function
       typedef std::unique_ptr<ChargedHadronVector> return_type;
