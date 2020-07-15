@@ -16,6 +16,7 @@
 #include "FWCore/Framework/interface/Event.h"
 
 #include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+
 #include "Geometry/Records/interface/GlobalTrackingGeometryRecord.h"
 #include "Geometry/CommonDetUnit/interface/GlobalTrackingGeometry.h"
 #include "Geometry/CommonDetUnit/interface/GeomDet.h"
@@ -45,6 +46,7 @@
 #include "TH2F.h"
 #include "TLorentzVector.h"
 
+#include <boost/mp11/list.hpp>
 /// Constructor
 MuonAlignmentAnalyzer::MuonAlignmentAnalyzer(const edm::ParameterSet &pset)
     : hGBNmuons(nullptr),
