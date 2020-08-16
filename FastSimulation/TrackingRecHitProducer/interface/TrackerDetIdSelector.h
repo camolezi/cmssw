@@ -10,8 +10,8 @@
 #include <boost/spirit/include/qi_rule.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/phoenix.hpp>
-#include <boost/phoenix/bind/bind_member_function.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
+
 
 #include <iostream>
 #include <cstdlib>
@@ -230,7 +230,6 @@ struct TrackerDetIdSelectorGrammar : boost::spirit::qi::grammar<ITERATOR,
   TrackerDetIdSelectorGrammar() : TrackerDetIdSelectorGrammar::base_type(comboRule) {
     namespace qi = boost::spirit::qi;
     namespace ascii = boost::spirit::ascii;
-    namespace phoenix = boost::phoenix;
 
     identifierFctRule = qi::lexeme[+qi::alpha[qi::_val += qi::_1]];
 
